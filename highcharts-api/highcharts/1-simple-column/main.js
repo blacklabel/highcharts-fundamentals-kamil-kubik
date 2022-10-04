@@ -4,6 +4,22 @@ const generateRandomSeriesData = () =>
 const chart = Highcharts.chart("container", {
   chart: {
     type: "column",
+    events: {
+      load() {
+        const largestSeriesYAxisValue = this.yAxis[0].dataMax;
+
+        this.yAxis[0].update({
+          max: largestSeriesYAxisValue * 2,
+          plotLines: [
+            {
+              dashStyle: "Dash",
+              value: largestSeriesYAxisValue * 1.5,
+              width: 2,
+            },
+          ],
+        });
+      },
+    },
   },
   title: {
     text: undefined,
@@ -12,7 +28,25 @@ const chart = Highcharts.chart("container", {
     categories: ["Jan", "Feb", "Mar"],
   },
   yAxis: {
-    tickPixelInterval: 50,
+    tickPositioner() {
+      const incrementedDataMax = this.dataMax * 2;
+      const positions = [];
+      const increment = 2;
+
+      if (incrementedDataMax !== null && this.dataMin !== null) {
+        for (
+          let tick = 0;
+          tick - increment <= incrementedDataMax;
+          tick += increment
+        ) {
+          if (tick <= incrementedDataMax) {
+            positions.push(tick);
+          }
+        }
+      }
+
+      return positions;
+    },
     title: {
       text: undefined,
     },
@@ -21,14 +55,17 @@ const chart = Highcharts.chart("container", {
     {
       name: "Tokyo",
       data: generateRandomSeriesData(),
+      index: 0,
     },
     {
       name: "New York",
       data: generateRandomSeriesData(),
+      index: 1,
     },
     {
       name: "London",
       data: generateRandomSeriesData(),
+      index: 2,
     },
   ],
   plotOptions: {
@@ -41,20 +78,5 @@ const chart = Highcharts.chart("container", {
         },
       },
     },
-  },
-});
-
-const largestSeriesYAxisValue = Math.max(chart.series[0].yAxis.dataMax);
-
-chart.update({
-  yAxis: {
-    max: largestSeriesYAxisValue * 2,
-    plotLines: [
-      {
-        dashStyle: "Dash",
-        value: largestSeriesYAxisValue * 1.5,
-        width: 2,
-      },
-    ],
   },
 });
