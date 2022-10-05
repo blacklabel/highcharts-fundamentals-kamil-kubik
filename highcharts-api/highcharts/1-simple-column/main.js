@@ -51,6 +51,9 @@ const chart = Highcharts.chart("container", {
       text: undefined,
     },
   },
+  credits: {
+    enabled: false,
+  },
   series: [
     {
       name: "Tokyo",
