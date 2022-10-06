@@ -3,19 +3,48 @@ Highcharts.chart("container", {
     type: "bar",
     marginTop: 50,
     events: {
+      load() {
+        this.renderer.text("Issue", 0, 35).add();
+        this.renderer.text("Record Count", this.plotLeft, 35).add();
+        this.renderer.text("Action", this.plotWidth, 35).add();
+
+        const buttonStyles = {
+          fill: "#fff",
+          stroke: "blue",
+          "stroke-width": 2,
+        };
+
+        const buttons = Array.from({ length: 4 }, (_, index) =>
+          this.renderer
+            .button(
+              "How to fix",
+              this.plotWidth,
+              this.axes[0].getThreshold(index) + this.marginBottom,
+              () => null,
+              buttonStyles,
+              buttonStyles
+            )
+            .attr(buttonStyles)
+            .add()
+        );
+
+        this.customButtons = buttons;
+      },
       render() {
-        console.info(this);
+        const customButtons = this.customButtons;
 
-        this.renderer.text('Issue', 0, 35).add();
-        this.renderer.text('Record Count', this.plotLeft, 35).add();
-        this.renderer.text('Action', this.plotWidth, 35).add();
-
-        console.info(this.axes[0].getThreshold(0));
-
-        this.renderer.button('How to fix 1', this.plotWidth, this.axes[0].getThreshold(0) + this.marginBottom).add();
-        this.renderer.text('How to fix 2', this.plotWidth, this.axes[0].getThreshold(1) + this.marginBottom).add();
-        this.renderer.text('How to fix 3', this.plotWidth, this.axes[0].getThreshold(2) + this.marginBottom).add();
-        this.renderer.text('How to fix 4', this.plotWidth, this.axes[0].getThreshold(3) + this.marginBottom).add();
+        if (Array.isArray(customButtons) && customButtons.length > 0) {
+          customButtons.map((button, index) =>
+            button
+              .attr(0)
+              .translate(
+                this.plotWidth,
+                this.axes[0].getThreshold(index) +
+                  this.marginBottom -
+                  button.height / 2
+              )
+          );
+        }
       },
     },
   },
