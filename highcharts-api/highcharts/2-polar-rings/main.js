@@ -26,8 +26,6 @@ const chart = Highcharts.chart("container", {
           value: 14,
         });
 
-        console.info(this);
-
         const redCircle = this.renderer
           .circle(
             this.plotWidth / 2 + this.plotLeft,
