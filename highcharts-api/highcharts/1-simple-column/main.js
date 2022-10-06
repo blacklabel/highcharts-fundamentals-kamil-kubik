@@ -29,9 +29,9 @@ const chart = Highcharts.chart("container", {
   },
   yAxis: {
     tickPositioner() {
-      const incrementedDataMax = this.dataMax * 2;
-      const positions = [];
-      const increment = 2;
+      const incrementedDataMax = this.dataMax * 2,
+        positions = [],
+        increment = 2;
 
       if (incrementedDataMax !== null && this.dataMin !== null) {
         for (
