@@ -23,13 +23,15 @@ const chart = Highcharts.chart("container", {
         yAxis.addPlotLine({
           width: 2,
           color: "green",
-          value: yAxis.dataMax * Math.random() * 2,
+          value: 14,
         });
+
+        console.info(this);
 
         const redCircle = this.renderer
           .circle(
-            this.plotSizeX / 2 + this.plotLeft,
-            this.plotSizeY / 2 + this.plotTop,
+            this.plotWidth / 2 + this.plotLeft,
+            this.plotHeight / 2 + this.plotTop,
             100
           )
           .attr({
@@ -42,14 +44,12 @@ const chart = Highcharts.chart("container", {
         this.redCircle = redCircle;
       },
       redraw() {
-        console.info(this);
         const redCircle = this.redCircle;
-        console.info(redCircle);
 
         if (redCircle) {
           redCircle.attr({
-            cx: this.plotSizeX / 2 + this.plotLeft,
-            cy: this.plotSizeY / 2 + this.plotTop,
+            cx: this.plotWidth / 2 + this.plotLeft,
+            cy: this.plotHeight / 2 + this.plotTop,
           });
         }
       },
@@ -68,25 +68,6 @@ const chart = Highcharts.chart("container", {
   yAxis: {
     min: 0,
     endOnTick: false,
-    // tickPositioner() {
-    //   const incrementedDataMax = this.dataMax * 2;
-    //   const positions = [];
-    //   const increment = 2;
-
-    //   if (incrementedDataMax !== null && this.dataMin !== null) {
-    //     for (
-    //       let tick = 0;
-    //       tick - increment <= incrementedDataMax;
-    //       tick += increment
-    //     ) {
-    //       if (tick <= incrementedDataMax) {
-    //         positions.push(tick);
-    //       }
-    //     }
-    //   }
-
-    //   return positions;
-    // },
     title: {
       text: undefined,
     },
