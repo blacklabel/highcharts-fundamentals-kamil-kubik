@@ -7,9 +7,9 @@ const chart = Highcharts.chart("container", {
     events: {
       load() {
         const yAxis = this.yAxis[0];
-        const largestSeriesYAxisValue = this.yAxis[0].dataMax;
+        const largestSeriesYAxisValue = yAxis.dataMax;
 
-        this.yAxis[0].update({
+        yAxis.update({
           max: largestSeriesYAxisValue * 2,
           plotLines: [
             {
@@ -20,20 +20,38 @@ const chart = Highcharts.chart("container", {
           ],
         });
 
-        this.renderer
-          .circle(200, 150, 100)
-          .attr({
-            fill: "white",
-            stroke: "red",
-            "stroke-width": 1,
-          })
-          .add();
-
         yAxis.addPlotLine({
-          width: 3,
+          width: 2,
           color: "green",
           value: yAxis.dataMax * Math.random() * 2,
         });
+
+        const redCircle = this.renderer
+          .circle(
+            this.plotSizeX / 2 + this.plotLeft,
+            this.plotSizeY / 2 + this.plotTop,
+            100
+          )
+          .attr({
+            fill: "white",
+            stroke: "red",
+            "stroke-width": 2,
+          })
+          .add();
+
+        this.redCircle = redCircle;
+      },
+      redraw() {
+        console.info(this);
+        const redCircle = this.redCircle;
+        console.info(redCircle);
+
+        if (redCircle) {
+          redCircle.attr({
+            cx: this.plotSizeX / 2 + this.plotLeft,
+            cy: this.plotSizeY / 2 + this.plotTop,
+          });
+        }
       },
     },
   },
