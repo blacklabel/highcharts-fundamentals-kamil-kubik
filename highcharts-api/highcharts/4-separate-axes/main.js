@@ -1,35 +1,48 @@
 Highcharts.chart('container', {
     chart: {
-        type: 'bar'
+        type: 'bar',
+        events: {
+            load() {
+                console.info(this);
+            }
+        },
+        marginLeft: 0,
+        marginRight: 0,
+        spacingLeft: 0,
+        spacingRight: 0
     },
     title: {
         text: undefined
     },
     xAxis: [{
-        lineWidth: 0,
-        lineColor: 'transparent',
-        tickWidth:0,
+        categories: ['Dep1', 'Dep2', 'Dep3', 'Dep4', 'Dep5'],
         left: '50%',
+        width: '20%',
+        lineWidth: 0,
+        labels: {
+            align: 'left',
+        },
     }],
     yAxis: [{
-        tickPositions: [0,20,40,60,80,100], 
+        // tickPositions: [0, 20, 40, 60, 80, 100], 
         left: '0%',
-        reversed: true
+        width: '40%',
+        reversed: true,
+        // offset: 0
     }, {
-        tickPositions: [0,20,40,60,80],  
-      left: '60%',
-      endOnTick: false,
-      showLastLabel: true,
-      offset: 0,
+        // tickPositions: [0, 20, 40, 60, 80],
+        left: '60%',
+        width: '40%',
+        offset: 0
     }],
-    tooltip: {
-        valueSuffix: ' millions'
-    },
     plotOptions: {
         bar: {
             dataLabels: {
-                enabled: true
-            }
+                enabled: true,
+                inside: true,
+                format: '{y}%'
+            },
+            color: 'red'
         }
     },
     credits: {
@@ -37,12 +50,17 @@ Highcharts.chart('container', {
     },
     series: [{
         name: 'Chart v1',
-        yAxis: 0,
-        data: [32, 43, 13, 42, 54]
+        // yAxis: 0,
+        data: [32, 43, 13, 42, 54],
+        dataLabels: {
+            align: 'right'
+        }
     }, {
         name: 'Chart v2',
         yAxis: 1,
-        data: [32, 43, 13, 42, 54]
+        data: [32, 43, 13, 42, 54],
+        dataLabels: {
+            align: 'left'
+        }
     }],
 });
-
