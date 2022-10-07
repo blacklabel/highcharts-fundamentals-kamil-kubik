@@ -6,14 +6,15 @@ const chart = Highcharts.chart("container", {
     type: "column",
     events: {
       load() {
-        const largestSeriesYAxisValue = this.yAxis[0].dataMax;
+        const yAxis = this.yAxis[0],
+          dataMax = yAxis.dataMax;
 
-        this.yAxis[0].update({
-          max: largestSeriesYAxisValue * 2,
+        yAxis.update({
+          max: dataMax * 2,
           plotLines: [
             {
               dashStyle: "Dash",
-              value: largestSeriesYAxisValue * 1.5,
+              value: dataMax * 1.5,
               width: 2,
             },
           ],
@@ -29,23 +30,7 @@ const chart = Highcharts.chart("container", {
   },
   yAxis: {
     tickPositioner() {
-      const incrementedDataMax = this.dataMax * 2,
-        positions = [],
-        increment = 2;
-
-      if (incrementedDataMax !== null && this.dataMin !== null) {
-        for (
-          let tick = 0;
-          tick - increment <= incrementedDataMax;
-          tick += increment
-        ) {
-          if (tick <= incrementedDataMax) {
-            positions.push(tick);
-          }
-        }
-      }
-
-      return positions;
+      return Array.from({ length: this.dataMax + 1 }, (_, index) => index * 2);
     },
     title: {
       text: undefined,
@@ -76,8 +61,7 @@ const chart = Highcharts.chart("container", {
       dataLabels: {
         enabled: true,
         formatter() {
-          const largestSeriesYAxisValue = Math.max(this.series.yAxis.dataMax);
-          return this.y === largestSeriesYAxisValue ? "max" : "";
+          return this.y === this.series.yAxis.dataMax ? "max" : "";
         },
       },
     },
