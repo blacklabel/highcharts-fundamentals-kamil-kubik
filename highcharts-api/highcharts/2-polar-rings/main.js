@@ -3,27 +3,21 @@ const generateRandomSeriesData = () =>
 
 const chart = Highcharts.chart("container", {
   chart: {
+    type: "column",
     polar: true,
     events: {
       load() {
-        const yAxis = this.yAxis[0];
-        const largestSeriesYAxisValue = yAxis.dataMax;
+        const yAxis = this.yAxis[0],
+          dataMax = yAxis.dataMax;
 
         yAxis.update({
-          max: largestSeriesYAxisValue * 2,
-          plotLines: [
-            {
-              dashStyle: "Dash",
-              value: largestSeriesYAxisValue * 1.5,
-              width: 2,
-            },
-          ],
+          max: dataMax * 2
         });
 
         yAxis.addPlotLine({
-          width: 2,
-          color: "green",
-          value: 14,
+          dashStyle: "Dash",
+          value: dataMax * 1.5,
+          width: 2
         });
 
         const redCircle = this.renderer
@@ -35,74 +29,78 @@ const chart = Highcharts.chart("container", {
           .attr({
             fill: "white",
             stroke: "red",
-            "stroke-width": 2,
+            "stroke-width": 2
           })
           .add();
 
         this.redCircle = redCircle;
       },
-      redraw() {
+      render() {
         const redCircle = this.redCircle;
 
         if (redCircle) {
           redCircle.attr({
             cx: this.plotWidth / 2 + this.plotLeft,
-            cy: this.plotHeight / 2 + this.plotTop,
+            cy: this.plotHeight / 2 + this.plotTop
           });
         }
-      },
-    },
+      }
+    }
   },
   title: {
-    text: undefined,
+    text: undefined
   },
   pane: {
     startAngle: 0,
-    endAngle: 360,
+    endAngle: 360
   },
   xAxis: {
-    categories: ["Jan", "Feb", "Mar"],
+    categories: ["Jan", "Feb", "Mar"]
   },
   yAxis: {
     min: 0,
     endOnTick: false,
     title: {
-      text: undefined,
+      text: undefined
     },
+    plotLines: [
+      {
+        width: 2,
+        color: "green",
+        value: 15,
+        dashStyle: "solid"
+      }
+    ]
   },
   credits: {
-    enabled: false,
+    enabled: false
   },
   series: [
     {
-      type: "column",
       name: "Tokyo",
-      data: generateRandomSeriesData(),
+      data: generateRandomSeriesData()
     },
     {
-      type: "column",
       name: "New York",
-      data: generateRandomSeriesData(),
+      data: generateRandomSeriesData()
     },
     {
-      type: "column",
       name: "London",
-      data: generateRandomSeriesData(),
-    },
+      data: generateRandomSeriesData()
+    }
   ],
   plotOptions: {
     series: {
       dataLabels: {
         enabled: true,
         formatter() {
-          const largestSeriesYAxisValue = Math.max(this.series.yAxis.dataMax);
-          return this.y === largestSeriesYAxisValue ? "max" : "";
-        },
-      },
+          return this.y === this.series.yAxis.dataMax ? "max" : "";
+        }
+      }
     },
     column: {
       pointPadding: 0,
-      groupPadding: 0,
-    },
-  },
+      groupPadding: 0
+    }
+  }
 });
