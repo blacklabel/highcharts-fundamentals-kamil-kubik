@@ -19,8 +19,8 @@ Highcharts.chart("container", {
             .button(
               "How to fix",
               chart.plotWidth,
-              chart.axes[0].getThreshold(index) + chart.marginBottom,
-              () => null,
+              null,
+              () => console.info(`Button ${index} clicked`),
               {
                 fill: "#fff",
                 stroke: "blue",
@@ -40,9 +40,7 @@ Highcharts.chart("container", {
 
         Object.values(chart.xAxis[0].ticks).forEach((tick) => {
           if (tick.pos !== -1) {
-            buttonsPositions.push(
-              chart.xAxis[0].toPixels(tick.pos)
-            );
+            buttonsPositions.push(chart.xAxis[0].toPixels(tick.pos));
           }
         });
 
