@@ -3,10 +3,14 @@ Highcharts.chart('container', {
         type: 'bar',
         events: {
             render() {
-                const chart = this;
-                chart.yAxis.map((axis) => {
-                    axis.axisTitle.translate(0, -(chart.plotTop + axis.height))
-                })
+                const chart = this,
+                    yAxis = chart.yAxis;
+
+                if (yAxis.length > 0) {
+                    yAxis.map((axis) => {
+                        axis.axisTitle.translate(0, -(chart.plotTop + axis.height));
+                    })
+                }
             }
         },
         marginTop: 50,
