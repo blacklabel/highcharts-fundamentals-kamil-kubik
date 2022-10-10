@@ -9,16 +9,19 @@ Highcharts.chart('container', {
         events: {
             load() {
                 const chart = this,
-                    points = chart.series[0].points
-
-                const visiblePointsCount = points.filter((point) => point.isInside).length;
-                const countLabel = chart.renderer.text(`Visible count: ${visiblePointsCount}`, chart.plotLeft, chart.plotHeight + chart.plotTop + 52).add();
+                    countLabel = chart.renderer.text('Visible count: 100', chart.plotLeft, chart.plotHeight + chart.plotTop + 52).add();
 
                 chart.countLabel = countLabel;
             },
             render() {
                 const chart = this,
-                    countLabel = chart.countLabel
+                    countLabel = chart.countLabel,
+                    points = chart.series[0].points,
+                    visiblePointsCount = points.filter((point) => point.isInside).length;
+
+                if (countLabel) {
+                    countLabel.attr({ text: `Visible count: ${visiblePointsCount}` })
+                }
 
                 console.info(countLabel);
             }
