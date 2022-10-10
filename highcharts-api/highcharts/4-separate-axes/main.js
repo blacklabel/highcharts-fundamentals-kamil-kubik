@@ -14,6 +14,9 @@ Highcharts.chart('container', {
     title: {
         text: undefined
     },
+    legend: {
+        enabled: false
+    },
     xAxis: [{
         categories: ['Dep1', 'Dep2', 'Dep3', 'Dep4', 'Dep5'],
         left: '50%',
@@ -24,16 +27,19 @@ Highcharts.chart('container', {
         },
     }],
     yAxis: [{
-        // tickPositions: [0, 20, 40, 60, 80, 100], 
         left: '0%',
         width: '40%',
         reversed: true,
-        // offset: 0
+        title: {
+            enabled: false,
+        }
     }, {
-        // tickPositions: [0, 20, 40, 60, 80],
         left: '60%',
         width: '40%',
-        offset: 0
+        offset: 0,
+        title: {
+            enabled: false
+        }
     }],
     plotOptions: {
         bar: {
@@ -50,7 +56,6 @@ Highcharts.chart('container', {
     },
     series: [{
         name: 'Chart v1',
-        // yAxis: 0,
         data: [32, 43, 13, 42, 54],
         dataLabels: {
             align: 'right'
