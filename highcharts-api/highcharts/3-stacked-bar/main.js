@@ -33,33 +33,32 @@ Highcharts.chart("container", {
         chart.customButtons = buttons;
       },
       render() {
-        let tTick = 0;
+        const chart = this,
+          customButtons = chart.customButtons,
+          actionLabel = chart.actionLabel,
+          buttonsPositions = [];
 
-        Object.values(this.xAxis[0].ticks).forEach((tick) => {
-          console.info(tick);
-          tTick = tick.gridLine.renderer.width;
-
-          tick.gridLine.pathArray[0][1] = this.spacingBox.x;
+        Object.values(chart.xAxis[0].ticks).forEach((tick) => {
+          if (tick.pos !== -1) {
+            buttonsPositions.push(
+              chart.xAxis[0].toPixels(tick.pos)
+            );
+          }
         });
 
-        const customButtons = this.customButtons;
-        const actionLabel = this.actionLabel;
-
-        if (customButtons) {
+        if (customButtons && buttonsPositions.length > 0) {
           customButtons.map((button, index) =>
             button
               .attr(0)
               .translate(
-                this.plotWidth,
-                this.axes[0].getThreshold(index) +
-                  this.marginBottom -
-                  button.height / 2
+                chart.plotWidth,
+                buttonsPositions[index] - button.height / 2
               )
           );
         }
 
         if (actionLabel) {
-          actionLabel.attr({ x: this.plotWidth });
+          actionLabel.attr({ x: chart.plotWidth });
         }
       },
     },
@@ -74,7 +73,7 @@ Highcharts.chart("container", {
   },
   yAxis: {
     min: 0,
-    max: 350,
+    max: 400,
     tickInterval: 50,
     gridLineWidth: 0,
     title: {
@@ -98,6 +97,20 @@ Highcharts.chart("container", {
   },
   credits: {
     enabled: false,
+  },
+  responsive: {
+    rules: [
+      {
+        condition: {
+          maxWidth: 768,
+        },
+        chartOptions: {
+          yAxis: {
+            max: 550,
+          },
+        },
+      },
+    ],
   },
   series: [
     {
