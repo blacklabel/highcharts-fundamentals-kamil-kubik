@@ -2,17 +2,21 @@ Highcharts.chart('container', {
     chart: {
         type: 'bar',
         events: {
-            load() {
-                console.info(this);
+            render() {
+                const chart = this;
+                chart.yAxis.map((axis) => {
+                    axis.axisTitle.translate(0, -(chart.plotTop + axis.height))
+                })
             }
         },
+        marginTop: 50,
         marginLeft: 0,
         marginRight: 0,
         spacingLeft: 0,
         spacingRight: 0
     },
     title: {
-        text: undefined
+        text: ''
     },
     legend: {
         enabled: false
@@ -31,14 +35,14 @@ Highcharts.chart('container', {
         width: '40%',
         reversed: true,
         title: {
-            enabled: false,
+            text: 'Managerial Position',
         }
     }, {
         left: '60%',
         width: '40%',
         offset: 0,
         title: {
-            enabled: false
+            text: 'Non Managerial Position',
         }
     }],
     plotOptions: {
