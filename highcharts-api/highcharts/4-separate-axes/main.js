@@ -30,7 +30,7 @@ Highcharts.chart('container', {
         lineWidth: 0,
         labels: {
             align: 'left',
-        },
+        }
     }],
     yAxis: [{
         max: 100,
@@ -61,9 +61,6 @@ Highcharts.chart('container', {
             },
             color: 'red'
         }
-    },
-    credits: {
-        enabled: false
     },
     series: [{
         enableMouseTracking: false,
