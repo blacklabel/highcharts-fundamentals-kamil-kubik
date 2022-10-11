@@ -43,10 +43,10 @@ Highcharts.chart("container", {
         const highestVisiblePoint = Math.max(
           ...visiblePoints.map((visiblePoint) => visiblePoint.options.y)
         );
-        const renderedVisiblePoints = visiblePoints.filter(
+        const filteredVisiblePoints = visiblePoints.filter(
           (visiblePoint) => visiblePoint.options.y === highestVisiblePoint
         );
-        const renderedVisibleTextes = renderedVisiblePoints.map(
+        const renderedVisibleTextes = filteredVisiblePoints.map(
           (visiblePoint) =>
             chart.renderer
               .text(
@@ -57,7 +57,7 @@ Highcharts.chart("container", {
               .attr({ fill: "red", "text-anchor": "middle" })
               .add()
         );
-        const renderedVisibleCircles = renderedVisiblePoints.map(
+        const renderedVisibleCircles = filteredVisiblePoints.map(
           (visiblePoint) =>
             chart.renderer
               .circle(
