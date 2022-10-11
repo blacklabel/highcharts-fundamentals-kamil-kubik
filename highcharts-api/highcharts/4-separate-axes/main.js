@@ -1,6 +1,9 @@
 Highcharts.chart('container', {
     chart: {
         type: 'bar',
+        marginTop: 50,
+        marginLeft: 0,
+        marginRight: 0,
         events: {
             render() {
                 const chart = this,
@@ -12,12 +15,7 @@ Highcharts.chart('container', {
                     })
                 }
             }
-        },
-        marginTop: 50,
-        marginLeft: 0,
-        marginRight: 0,
-        spacingLeft: 0,
-        spacingRight: 0
+        }
     },
     title: {
         text: ''
@@ -35,6 +33,7 @@ Highcharts.chart('container', {
         },
     }],
     yAxis: [{
+        max: 100,
         left: '0%',
         width: '40%',
         reversed: true,
@@ -42,6 +41,7 @@ Highcharts.chart('container', {
             text: 'Managerial Position',
         }
     }, {
+        max: 100,
         left: '60%',
         width: '40%',
         offset: 0,
@@ -50,6 +50,9 @@ Highcharts.chart('container', {
         }
     }],
     plotOptions: {
+        series: {
+            stacking: 'normal'
+        },
         bar: {
             dataLabels: {
                 enabled: true,
@@ -63,6 +66,21 @@ Highcharts.chart('container', {
         enabled: false
     },
     series: [{
+        enableMouseTracking: false,
+        data: Array.from({ length: 5 }, () => 100),
+        color: '#A1B5C9',
+        dataLabels: {
+            enabled: false
+        }
+      }, {
+        yAxis: 1,
+        enableMouseTracking: false,
+        data: Array.from({ length: 5 }, () => 100),
+        color: '#A1B5C9',
+        dataLabels: {
+            enabled: false
+        }
+      }, {
         name: 'Chart v1',
         data: [32, 43, 13, 42, 54],
         dataLabels: {
@@ -75,5 +93,5 @@ Highcharts.chart('container', {
         dataLabels: {
             align: 'left'
         }
-    }],
+    }]
 });
