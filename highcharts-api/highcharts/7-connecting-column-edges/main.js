@@ -9,22 +9,20 @@ Highcharts.chart("container", {
         const chart = this,
           series = chart.series;
 
-        series.forEach((serie) => {
-          for (let index = 0; index < serie.points.length - 1; index++) {
-            serie.points[index].path = chart.renderer
-              .path({ stroke: serie.color, "stroke-width": 3, zIndex: 1 })
+        series.forEach((serie) =>
+          serie.points.slice(0, -1).map((point) => {
+            point.path = chart.renderer
+              .path({ zIndex: 1, stroke: serie.color, "stroke-width": 3 })
               .add();
-          }
-        });
+          })
+        );
       },
       render() {
-        const chart = this,
-          series = chart.series;
+        const chart = this;
 
-        series.forEach((serie) => {
-          for (let index = 0; index < serie.points.length - 1; index++) {
-            const point = serie.points[index],
-              nextPoint = serie.points[index + 1],
+        chart.series.forEach((serie) =>
+          serie.points.slice(0, -1).map((point, index) => {
+            const nextPoint = serie.points[index + 1],
               pointPath = point.path;
 
             if (pointPath) {
@@ -41,8 +39,8 @@ Highcharts.chart("container", {
 
               !serie.visible ? pointPath.hide() : pointPath.show();
             }
-          }
-        });
+          })
+        );
       },
     },
   },
