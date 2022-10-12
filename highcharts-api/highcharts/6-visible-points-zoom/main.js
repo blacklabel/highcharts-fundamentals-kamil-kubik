@@ -16,21 +16,13 @@ Highcharts.chart("container", {
           points = chart.series[0].points,
           visiblePoints = points.filter((point) => point.isInside),
           visiblePointsTexts = chart.visiblePointsTexts,
-          visibleCircles = chart.visibleCircles;
-
-        if (countLabel) {
-          countLabel.attr({ text: `Visible count: ${visiblePoints.length}` });
-        } else {
-          const renderedCountLabel = chart.renderer
-            .text(
-              `Visible count: ${generatedSeries.length}`,
-              chart.plotLeft,
-              chart.plotHeight + chart.plotTop + 50
-            )
-            .add();
-
-          chart.countLabel = renderedCountLabel;
-        }
+          visibleCircles = chart.visibleCircles,
+          highestVisiblePoint = Math.max(
+            ...visiblePoints.map((visiblePoint) => visiblePoint.y)
+          ),
+          filteredVisiblePoints = visiblePoints.filter(
+            (visiblePoint) => visiblePoint.y === highestVisiblePoint
+          );
 
         if (visiblePointsTexts?.length > 0) {
           visiblePointsTexts.forEach((visiblePointText) =>
@@ -42,40 +34,41 @@ Highcharts.chart("container", {
           visibleCircles.forEach((visibleCircle) => visibleCircle.destroy());
         }
 
-        const highestVisiblePoint = Math.max(
-          ...visiblePoints.map((visiblePoint) => visiblePoint.options.y)
-        );
-        const filteredVisiblePoints = visiblePoints.filter(
-          (visiblePoint) => visiblePoint.options.y === highestVisiblePoint
-        );
-        const renderedVisibleTextes = filteredVisiblePoints.map(
-          (visiblePoint) =>
-            chart.renderer
-              .text(
-                visiblePoint.options.y.toString(),
-                chart.plotLeft + visiblePoint.plotX,
-                visiblePoint.plotY + chart.plotTop - 10
-              )
-              .attr({ fill: "red", "text-anchor": "middle" })
-              .add()
-        );
-        const renderedVisibleCircles = filteredVisiblePoints.map(
-          (visiblePoint) =>
-            chart.renderer
-              .circle(
-                visiblePoint.plotX + chart.plotLeft,
-                chart.plotHeight + chart.plotTop,
-                3
-              )
-              .attr({ fill: "red" })
-              .add()
-              .toFront()
-        );
+        if (countLabel) {
+          countLabel.attr({ text: `Visible count: ${visiblePoints.length}` });
+        } else {
+          chart.countLabel = chart.renderer
+            .text(
+              `Visible count: ${generatedSeries.length}`,
+              chart.plotLeft,
+              chart.plotHeight + chart.plotTop + 50
+            )
+            .add();
+        }
 
-        chart.visiblePointsTexts = renderedVisibleTextes;
-        chart.visibleCircles = renderedVisibleCircles;
-      },
-    },
+        chart.visiblePointsTexts = filteredVisiblePoints.map((visiblePoint) =>
+          chart.renderer
+            .text(
+              visiblePoint.y.toString(),
+              chart.plotLeft + visiblePoint.plotX,
+              visiblePoint.plotY + chart.plotTop - 10
+            )
+            .attr({ fill: "red", "text-anchor": "middle" })
+            .add()
+        );
+        chart.visibleCircles = filteredVisiblePoints.map((visiblePoint) =>
+          chart.renderer
+            .circle(
+              visiblePoint.plotX + chart.plotLeft,
+              chart.plotHeight + chart.plotTop,
+              3
+            )
+            .attr({ fill: "red" })
+            .add()
+            .toFront()
+        );
+      }
+    }
   },
   title: {
     text: "Chart title",
@@ -88,7 +81,7 @@ Highcharts.chart("container", {
   series: [
     {
       name: "Series 1",
-      data: generatedSeries
+      data: generatedSeries,
     }
   ]
 });
