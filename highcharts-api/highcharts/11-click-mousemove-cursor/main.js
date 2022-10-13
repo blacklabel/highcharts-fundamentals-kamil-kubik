@@ -11,7 +11,7 @@ Highcharts.chart('container', {
 
         if (container) {
             container.addEventListener('click', ({ chartX, chartY }) => {
-                renderer.circle(chartX, chartY, 5).attr({ fill: 'blue' }).add()
+                renderer.circle(chartX, chartY, 5).attr({ fill: 'blue' }).add();
             });
         
             container.addEventListener('mousemove', ({ chartX, chartY }) => {
