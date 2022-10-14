@@ -23,7 +23,18 @@ Highcharts.chart('container', {
             'Nov',
             'Dec'
         ],
-        crosshair: true
+        labels: {
+            rotation: -45,
+            formatter() {
+                // console.info(this);
+                const chart = this,
+                    value = chart.value;
+
+                console.info(chart.axis.options?.activeLabel);
+
+                return chart.axis.options?.activeLabel === value ? `<span style="font-size: 0.8rem; fill: red">${value}<span/>` : value;
+            }
+        }
     },
     yAxis: {},
     series: [{
@@ -44,19 +55,17 @@ Highcharts.chart('container', {
     }],
     plotOptions: {
         series: {
-            events: {
-                mouseOver({ target }) {
-                    console.info(target);
+            point: {
+                events: {
+                    mouseOver({ target }) {
+                        // console.info(this);
+                        // console.info(target);
 
-                    // target.options.dataLabels.style.color = '#fff';
-
-                    // target.options.dataLabels.attr({ color: '#fff' })
-
-                    target.xAxis.update({
-                        userOptions: {
-                            color: 'red'
-                        }
-                    });
+                        const series = this.series;
+    
+                        series.xAxis.options.activeLabel = target.category
+                        series.chart.redraw(false);
+                    }
                 }
             }
         }
