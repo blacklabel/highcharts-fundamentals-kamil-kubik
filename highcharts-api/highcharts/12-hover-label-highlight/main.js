@@ -26,20 +26,18 @@ Highcharts.chart('container', {
         labels: {
             rotation: -45,
             formatter() {
-                // console.info(this);
                 const chart = this,
                     value = chart.value;
 
-                console.info(chart.axis.options?.activeLabel);
-
-                return chart.axis.options?.activeLabel === value ? `<span style="font-size: 0.8rem; fill: red">${value}<span/>` : value;
+                return chart.axis.options?.activeLabel === value ? 
+                    `<span style="fill: red; font-weight: bold">${value}<span/>` 
+                    : value;
             }
         }
     },
-    yAxis: {},
     series: [{
         name: 'Tokyo',
-        data: generatedData(),
+        data: generatedData()
     }, {
         name: 'New York',
         data: generatedData()
@@ -58,12 +56,15 @@ Highcharts.chart('container', {
             point: {
                 events: {
                     mouseOver({ target }) {
-                        // console.info(this);
-                        // console.info(target);
-
                         const series = this.series;
     
-                        series.xAxis.options.activeLabel = target.category
+                        series.xAxis.options.activeLabel = target.category;
+                        series.chart.redraw(false);
+                    },
+                    mouseOut() {
+                        const series = this.series;
+
+                        series.xAxis.options.activeLabel = null;
                         series.chart.redraw(false);
                     }
                 }
