@@ -49,8 +49,8 @@ Highcharts.chart('container', {
                   },
                   mouseOver() {
                     const point = this,
-                      series = point.series;
-                      chart = point.series.chart;
+                      series = point.series,
+                      chart = point.series.chart,
                       secondTooltip = chart.secondTooltip || new Highcharts.Tooltip(chart, chart.tooltip.options);
                     
                     series.chart.series.forEach((seriesElement, index) => {
