@@ -1,21 +1,21 @@
-const changeVisibility = (link, isVisible) => {
+const changeVisibility = (link, isHidden) => {
   link.toNode.graphic.css({
-    opacity: Number(isVisible),
+    opacity: Number(!isHidden),
   });
   link.toNode.dataLabel.css({
-    opacity: Number(isVisible),
+    opacity: Number(!isHidden),
   });
-  link.toNode.isHidden = !isVisible;
+  link.toNode.isHidden = isHidden;
 
-  if (isVisible) {
-    link.graphic.show();
-  } else {
+  if (isHidden) {
     link.graphic.hide();
+  } else {
+    link.graphic.show();
   }
 
   if (link.toNode.linksFrom.length > 0) {
     link.toNode.linksFrom.forEach((innerLink) => {
-      changeVisibility(innerLink, false);
+      changeVisibility(innerLink, true);
     });
   }
 };
@@ -26,7 +26,7 @@ Highcharts.chart("container", {
     events: {
       load() {
         this.series[0].points.forEach((point) => {
-          changeVisibility(point, false);
+          changeVisibility(point, true);
         });
       },
     },
@@ -56,9 +56,9 @@ Highcharts.chart("container", {
           click() {
             this.linksFrom.forEach((link) => {
               if (link.toNode.isHidden) {
-                changeVisibility(link, true);
-              } else {
                 changeVisibility(link, false);
+              } else {
+                changeVisibility(link, true);
               }
             });
           },
