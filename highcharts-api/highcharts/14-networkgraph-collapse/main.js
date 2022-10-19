@@ -1,16 +1,21 @@
-const disableVisibility = (link) => {
-  link.graphic.hide();
+const changeVisibility = (link, isVisible) => {
   link.toNode.graphic.css({
-    opacity: 0,
+    opacity: Number(isVisible),
   });
   link.toNode.dataLabel.css({
-    opacity: 0,
+    opacity: Number(isVisible),
   });
-  link.toNode.isHidden = true;
+  link.toNode.isHidden = !isVisible;
+
+  if (isVisible) {
+    link.graphic.show();
+  } else {
+    link.graphic.hide();
+  }
 
   if (link.toNode.linksFrom.length > 0) {
     link.toNode.linksFrom.forEach((innerLink) => {
-      disableVisibility(innerLink);
+      changeVisibility(innerLink, false);
     });
   }
 };
@@ -21,7 +26,7 @@ Highcharts.chart("container", {
     events: {
       load() {
         this.series[0].points.forEach((point) => {
-          disableVisibility(point);
+          changeVisibility(point, false);
         });
       },
     },
@@ -51,16 +56,9 @@ Highcharts.chart("container", {
           click() {
             this.linksFrom.forEach((link) => {
               if (link.toNode.isHidden) {
-                link.graphic.show();
-                link.toNode.graphic.css({
-                  opacity: 1,
-                });
-                link.toNode.dataLabel.css({
-                  opacity: 1,
-                });
-                link.toNode.isHidden = false;
+                changeVisibility(link, true);
               } else {
-                disableVisibility(link);
+                changeVisibility(link, false);
               }
             });
           },
@@ -92,8 +90,6 @@ Highcharts.chart("container", {
         ["spouse", "anousha"],
         ["Brotherinlaw", "nabeel"],
         ["Brotherinlaw", "shahzob"],
-        ["anousha", "shahzob"],
-        ["anousha", "sidra"],
       ],
     },
   ],
