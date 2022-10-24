@@ -13,11 +13,9 @@ const changeVisibility = (link, isHidden) => {
     link.graphic.show();
   }
 
-  if (link.toNode.linksFrom.length > 0) {
-    link.toNode.linksFrom.forEach((innerLink) => {
-      changeVisibility(innerLink, true);
-    });
-  }
+  link.toNode.linksFrom.forEach((innerLink) => {
+    changeVisibility(innerLink, true);
+  });
 };
 
 Highcharts.chart("container", {
@@ -55,11 +53,7 @@ Highcharts.chart("container", {
         events: {
           click() {
             this.linksFrom.forEach((link) => {
-              if (link.toNode.isHidden) {
-                changeVisibility(link, false);
-              } else {
-                changeVisibility(link, true);
-              }
+              changeVisibility(link, !link.toNode.isHidden);
             });
           },
         },
