@@ -5,12 +5,14 @@ Highcharts.mapChart('container', {
     series: [{
         type: 'map',
         data: [
-            ['pl', 1],
-            ['us', 2],
-            ['pe', 3],
-            ['tz', 4],
-            ['au', 5]
-        ]
+            ['POL', 100],
+            ['USA', 90],
+            ['PER', 50],
+            ['TZA', 40],
+            ['AUS', 1]
+        ],
+        joinBy: ['iso-a3'],
+        keys: ['iso-a3']
     }, {
         type: 'mapbubble',
         data: [
