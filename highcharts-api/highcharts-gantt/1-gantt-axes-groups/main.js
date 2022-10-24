@@ -1,7 +1,7 @@
 Highcharts.ganttChart('container', {
     xAxis: [{
-        labels: {
-            format: '{value: %A, %d %b, %Y}'
+        dateTimeLabelFormats: { 
+            week: '%A, %d %b, %Y' 
         }
     }],
     yAxis: {
