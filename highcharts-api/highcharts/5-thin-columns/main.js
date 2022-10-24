@@ -1,8 +1,12 @@
 const generateSeries = () =>
     Array.from({ length: 100 }, (_, index) => ({
         name: `Element v${index}`,
-        data: Array.from({ length: 5 }, () => 
-            Math.floor(Math.random() * (95 - 55 + 1)) + 55),
+        data: Array.from({ length: 5 }, () => {
+            const min = 55,
+                max = 95;
+
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }),
         color: 'red'
     })); 
 
