@@ -1,11 +1,8 @@
 Highcharts.ganttChart('container', {
     xAxis: [{
-        visible: false
-    }, {
         labels: {
             format: '{value: %A, %d %b, %Y}'
-        },
-        tickInterval: 432000000
+        }
     }],
     yAxis: {
         categories: ['Main', 'First', 'Second']
