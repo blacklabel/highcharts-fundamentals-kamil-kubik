@@ -5,7 +5,7 @@ Highcharts.ganttChart('container', {
         }
     }],
     yAxis: {
-        categories: ['Main', 'First', 'Second']
+        uniqueNames: true
     },
     series: [{
         name: 'Project 1',
@@ -14,17 +14,14 @@ Highcharts.ganttChart('container', {
             pointWidth: 0
         }, {
             name: 'First',
-            y: 1,
             start: 1560902400000,
             end: 1561075200000
         }, {
             name: 'Second',
-            y: 2,
             start: 1560902400000,
             end: 1561075200000
         }, {
             name: 'Second',
-            y: 2,
             start: 1561507200000,
             end: 1561680000000
         }]
