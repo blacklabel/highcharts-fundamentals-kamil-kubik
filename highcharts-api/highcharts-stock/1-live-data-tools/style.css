@@ -1,0 +1,29 @@
+.data-grouping-btn .highcharts-menu-item-btn::before {
+  content: "1" !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.data-grouping-btn-2 .highcharts-menu-item-btn::before {
+  content: "2" !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.live-data-btn .highcharts-menu-item-btn::before {
+  content: "LIVE" !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1rem;
+  font-weight: bold;
+}

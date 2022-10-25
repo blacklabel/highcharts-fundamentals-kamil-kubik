@@ -1,8 +1,3 @@
-const generateData = () =>
-  Array.from({ length: 150 }, () => Math.floor(Math.random() * (100 + 1)) + 1);
-
-console.info(generateData());
-
 const defaultButtons = [
   "indicators",
   "separator",
@@ -23,6 +18,41 @@ const defaultButtons = [
   "currentPriceIndicator",
   "saveChart",
 ];
+
+const generateData = () => {
+  const min = 1,
+    max = 100;
+
+  return Array.from(
+    { length: 150 },
+    () => Math.floor(Math.random() * (max + min)) + min
+  );
+};
+
+const updateChartOptions = (chart, options) => {
+  chart.series[0].update(options);
+};
+
+function startLiveData(chart) {
+  const series = chart.series[0],
+    x = new Date().getTime(),
+    y = Math.round(Math.random() * 100);
+
+  series.addPoint([x, y]);
+}
+
+const handleLiveData = (chart, index) => {
+  let liveData = [];
+
+  if (!liveData[index]) {
+    liveData[index] = setInterval(() => {
+      startLiveData(chart);
+    }, 1);
+  } else {
+    clearInterval(liveData[index]);
+    liveData[index] = null;
+  }
+}
 
 Highcharts.stockChart("container", {
   title: {
@@ -73,4 +103,54 @@ Highcharts.stockChart("container-2", {
       data: generateData(),
     },
   ],
+  stockTools: {
+    gui: {
+      buttons: ["liveData", "openingList", ...defaultButtons],
+      definitions: {
+        openingList: {
+          items: ["dataGrouping", "dataGrouping2"],
+          dataGrouping: {
+            className: "data-grouping-btn",
+          },
+          dataGrouping2: {
+            className: "data-grouping-btn-2",
+          },
+        },
+        liveData: {
+          className: "live-data-btn",
+        },
+      },
+    },
+  },
+  navigation: {
+    bindings: {
+      dataGrouping: {
+        className: "data-grouping-btn",
+        init() {
+          updateChartOptions(this.chart, {
+            dataGrouping: {
+              groupPixelWidth: 10,
+            },
+          });
+        },
+      },
+      dataGrouping2: {
+        className: "data-grouping-btn-2",
+        init() {
+          updateChartOptions(this.chart, {
+            dataGrouping: {
+              groupPixelWidth: 80,
+            },
+          });
+        },
+      },
+      liveData: {
+        className: "live-data-btn",
+        init() {
+          const { chart, index } = this;
+          handleLiveData(chart, index);
+        },
+      },
+    },
+  },
 });
