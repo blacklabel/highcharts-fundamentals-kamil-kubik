@@ -23,36 +23,33 @@ const generateData = () => {
   const min = 1,
     max = 100;
 
-  return Array.from(
-    { length: 150 },
-    () => Math.floor(Math.random() * (max + min)) + min
-  );
+  return Array.from({ length: 150 }, (_, index) => [
+    new Date().getTime() + index * 1000000,
+    Math.floor(Math.random() * (max + min)) + min,
+  ]);
 };
 
 const updateChartOptions = (chart, options) => {
   chart.series[0].update(options);
 };
 
-function startLiveData(chart) {
-  const series = chart.series[0],
-    x = new Date().getTime(),
-    y = Math.round(Math.random() * 100);
+let liveDataInterval = null;
 
-  series.addPoint([x, y]);
-}
+const handleLiveData = (chart) => {
+  if (!liveDataInterval) {
+    liveDataInterval = setInterval(() => {
+      const series = chart.series[0],
+        min = 1,
+        max = 100,
+        x = new Date().getTime() + series.points.length * 1000000,
+        y = Math.floor(Math.random() * (max + min)) + min;
 
-const handleLiveData = (chart, index) => {
-  let liveData = [];
-
-  if (!liveData[index]) {
-    liveData[index] = setInterval(() => {
-      startLiveData(chart);
-    }, 1);
+      series.addPoint([x, y]);
+    }, 1000);
   } else {
-    clearInterval(liveData[index]);
-    liveData[index] = null;
+    liveDataInterval = clearInterval(liveDataInterval);
   }
-}
+};
 
 Highcharts.stockChart("container", {
   title: {
@@ -147,8 +144,7 @@ Highcharts.stockChart("container-2", {
       liveData: {
         className: "live-data-btn",
         init() {
-          const { chart, index } = this;
-          handleLiveData(chart, index);
+          handleLiveData(this.chart);
         },
       },
     },
