@@ -16,13 +16,13 @@ const defaultButtons = [
   "typeChange",
   "separator",
   "currentPriceIndicator",
-  "saveChart",
+  "saveChart"
 ];
 
 const liveDataDefiniton = {
   liveData: {
-    className: "live-data-btn",
-  },
+    className: "live-data-btn"
+  }
 };
 
 const generateData = () => {
@@ -31,7 +31,7 @@ const generateData = () => {
 
   return Array.from({ length: 150 }, (_, index) => [
     new Date().getTime() + index * 1000000,
-    Math.floor(Math.random() * (max + min)) + min,
+    Math.floor(Math.random() * (max + min)) + min
   ]);
 };
 
@@ -64,52 +64,52 @@ const handleLiveData = (thisRefference) => {
 
   if (selectedButtonElement) {
     Highcharts.fireEvent(thisRefference, "deselectButton", {
-      button: document.querySelector(`.${selectedButton.className}`),
+      button: document.querySelector(`.${selectedButton.className}`)
     });
   }
 };
 
 Highcharts.stockChart("container", {
   title: {
-    text: "",
+    text: ""
   },
   yAxis: [
     {
-      height: "50%",
+      height: "50%"
     },
     {
       top: "50%",
-      height: "50%",
-    },
+      height: "50%"
+    }
   ],
   series: [
     {
       id: "series",
       name: "Demo series",
-      data: generateData(),
+      data: generateData()
     },
     {
       type: "bb",
       linkedTo: "series",
       dataGrouping: {
         anchor: "middle",
-        forced: true,
-      },
+        forced: true
+      }
     },
     {
       yAxis: 1,
       type: "ema",
       linkedTo: "series",
       dataGrouping: {
-        forced: true,
-      },
-    },
+        forced: true
+      }
+    }
   ],
   stockTools: {
     gui: {
       buttons: ["liveData", ...defaultButtons],
       definitions: liveDataDefiniton,
-    },
+    }
   },
   navigation: {
     bindings: {
@@ -117,22 +117,22 @@ Highcharts.stockChart("container", {
         className: "live-data-btn",
         init() {
           handleLiveData(this);
-        },
-      },
-    },
-  },
+        }
+      }
+    }
+  }
 });
 
 Highcharts.stockChart("container-2", {
   title: {
-    text: "",
+    text: ""
   },
   series: [
     {
       id: "series",
       name: "Demo series",
-      data: generateData(),
-    },
+      data: generateData()
+    }
   ],
   stockTools: {
     gui: {
@@ -141,15 +141,15 @@ Highcharts.stockChart("container-2", {
         openingList: {
           items: ["dataGrouping", "dataGrouping2"],
           dataGrouping: {
-            className: "data-grouping-btn",
+            className: "data-grouping-btn"
           },
           dataGrouping2: {
-            className: "data-grouping-btn-2",
-          },
+            className: "data-grouping-btn-2"
+          }
         },
-        ...liveDataDefiniton,
-      },
-    },
+        ...liveDataDefiniton
+      }
+    }
   },
   navigation: {
     bindings: {
@@ -158,27 +158,27 @@ Highcharts.stockChart("container-2", {
         init() {
           updateChartOptions(this.chart, {
             dataGrouping: {
-              groupPixelWidth: 10,
-            },
+              groupPixelWidth: 10
+            }
           });
-        },
+        }
       },
       dataGrouping2: {
         className: "data-grouping-btn-2",
         init() {
           updateChartOptions(this.chart, {
             dataGrouping: {
-              groupPixelWidth: 80,
-            },
+              groupPixelWidth: 80
+            }
           });
-        },
+        }
       },
       liveData: {
         className: "live-data-btn",
         init() {
           handleLiveData(this);
-        },
-      },
-    },
-  },
+        }
+      }
+    }
+  }
 });
