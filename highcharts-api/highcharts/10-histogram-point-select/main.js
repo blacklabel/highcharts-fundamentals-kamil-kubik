@@ -11,10 +11,14 @@ Highcharts.chart('container', {
         opposite: true
     }],
     yAxis: [{
-        title: { text: 'Values' }
+        title: { text: 'Values' },
+        min: 0,
+        max: 12
     }, {
         title: { text: 'Values' },
-        opposite: true
+        opposite: true,
+        min: 0,
+        max: 8
     }],
     series: [{
         name: 'Series 1',
@@ -38,9 +42,9 @@ Highcharts.chart('container', {
     
                             if (x <= scatterSerieY && x2 >= scatterSerieY ) {
                                 scatterSerie.select(true, true);
-                            };
+                            }
                         });
-                    };
+                    }
                 }
             }
         }
