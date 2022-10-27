@@ -19,6 +19,12 @@ const defaultButtons = [
   "saveChart",
 ];
 
+const liveDataDefiniton = {
+  liveData: {
+    className: "live-data-btn",
+  },
+};
+
 const generateData = () => {
   const min = 1,
     max = 100;
@@ -33,11 +39,17 @@ const updateChartOptions = (chart, options) => {
   chart.series[0].update(options);
 };
 
-let liveDataInterval = null;
+let liveDataInterval = [];
 
-const handleLiveData = (chart) => {
-  if (!liveDataInterval) {
-    liveDataInterval = setInterval(() => {
+const handleLiveData = (thisRefference) => {
+  const { chart, selectedButton } = thisRefference,
+    selectedButtonElement = document.querySelector(
+      `.${selectedButton.className}`
+    ),
+    index = chart.index;
+
+  if (!liveDataInterval[index]) {
+    liveDataInterval[index] = setInterval(() => {
       const series = chart.series[0],
         min = 1,
         max = 100,
@@ -47,7 +59,13 @@ const handleLiveData = (chart) => {
       series.addPoint([x, y]);
     }, 1000);
   } else {
-    liveDataInterval = clearInterval(liveDataInterval);
+    liveDataInterval[index] = clearInterval(liveDataInterval[index]);
+  }
+
+  if (selectedButtonElement) {
+    Highcharts.fireEvent(thisRefference, "deselectButton", {
+      button: document.querySelector(`.${selectedButton.className}`),
+    });
   }
 };
 
@@ -87,6 +105,22 @@ Highcharts.stockChart("container", {
       },
     },
   ],
+  stockTools: {
+    gui: {
+      buttons: ["liveData", ...defaultButtons],
+      definitions: liveDataDefiniton,
+    },
+  },
+  navigation: {
+    bindings: {
+      liveData: {
+        className: "live-data-btn",
+        init() {
+          handleLiveData(this);
+        },
+      },
+    },
+  },
 });
 
 Highcharts.stockChart("container-2", {
@@ -113,9 +147,7 @@ Highcharts.stockChart("container-2", {
             className: "data-grouping-btn-2",
           },
         },
-        liveData: {
-          className: "live-data-btn",
-        },
+        ...liveDataDefiniton,
       },
     },
   },
@@ -144,7 +176,7 @@ Highcharts.stockChart("container-2", {
       liveData: {
         className: "live-data-btn",
         init() {
-          handleLiveData(this.chart);
+          handleLiveData(this);
         },
       },
     },
