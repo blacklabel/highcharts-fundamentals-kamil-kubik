@@ -41,8 +41,8 @@ const updateChartOptions = (chart, options) => {
 
 let liveDataInterval = [];
 
-const handleLiveData = (thisRefference) => {
-  const { chart, selectedButton } = thisRefference,
+const handleLiveData = (button) => {
+  const { chart, selectedButton } = button,
     selectedButtonElement = document.querySelector(
       `.${selectedButton.className}`
     ),
@@ -63,8 +63,8 @@ const handleLiveData = (thisRefference) => {
   }
 
   if (selectedButtonElement) {
-    Highcharts.fireEvent(thisRefference, "deselectButton", {
-      button: document.querySelector(`.${selectedButton.className}`)
+    Highcharts.fireEvent(button, "deselectButton", {
+      button: selectedButtonElement
     });
   }
 };

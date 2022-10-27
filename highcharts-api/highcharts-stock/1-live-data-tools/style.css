@@ -1,4 +1,4 @@
-.data-grouping-btn .highcharts-menu-item-btn::before {
+.data-grouping-btn > .highcharts-menu-item-btn::before {
   content: "1" !important;
   position: absolute;
   top: 50%;
@@ -8,7 +8,7 @@
   font-weight: bold;
 }
 
-.data-grouping-btn-2 .highcharts-menu-item-btn::before {
+.data-grouping-btn-2 > .highcharts-menu-item-btn::before {
   content: "2" !important;
   position: absolute;
   top: 50%;
