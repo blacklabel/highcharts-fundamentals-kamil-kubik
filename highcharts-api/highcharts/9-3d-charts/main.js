@@ -1,18 +1,13 @@
-// Give the points a 3D feel by adding a radial gradient
-Highcharts.setOptions({
-  colors: Highcharts.getOptions().colors.map(() => {
-    return {
-      radialGradient: {
-        cx: 0.4,
-        cy: 0.3,
-        r: 0.5,
-      },
-      stops: [
-        [0, 'white'],
-        [1, Highcharts.color('yellow').brighten(-0.2).get("rgb")]
-      ]
-    };
-  }),
+const radialGradient = (color) => ({
+  radialGradient: {
+    cx: 0.4,
+    cy: 0.3,
+    r: 0.5,
+  },
+  stops: [
+    [0, "white"],
+    [1, Highcharts.color(color).brighten(-0.2).get("rgb")],
+  ],
 });
 
 const chart = new Highcharts.Chart({
@@ -37,11 +32,25 @@ const chart = new Highcharts.Chart({
       },
     },
     events: {
-      render() {
-        renderer
-          .path(["M", 50, 50, "L", 50, 50, "z", 50, 50])
-          .attr({ 'stroke-width': 5, stroke: "#ffffff" })
-          .add();
+      load() {
+        const chart = this,
+          cos = Math.cos,
+          sin = Math.sin,
+          PI = Math.PI;
+        let interval = 1;
+
+        setInterval(() => {
+          x = 5;
+          y = 5;
+          z = 4.3;
+          x += 1 * cos(interval * 2 * PI / 60);
+          z += 2 * sin(interval * 2 * PI / 60);
+
+          chart.series[1].points[0].update([x, y, z], false);
+          chart.redraw(false);
+
+          interval++;
+        }, 40);
       },
     },
   },
@@ -78,12 +87,30 @@ const chart = new Highcharts.Chart({
   },
   series: [
     {
-      name: "Data",
-      data: [
-        [5, 5, 5]
-      ],
+      name: "Demo series",
+      data: [[5, 5, 5]],
       marker: {
-        radius: 20
+        radius: 16,
+      },
+      color: radialGradient("yellow"),
+      planeProjection: {
+        enabled: true,
+        fill: "yellow",
+        radius: 16,
+      },
+    },
+    {
+      name: "Demo series",
+      data: [[5, 5, 2]],
+      marker: {
+        radius: 12,
+        symbol: "circle",
+      },
+      color: radialGradient("blue"),
+      planeProjection: {
+        enabled: true,
+        fill: "blue",
+        radius: 12,
       },
     },
   ],
