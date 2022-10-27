@@ -43,10 +43,14 @@ const chart = new Highcharts.Chart({
           x = 5;
           y = 5;
           z = 4.3;
-          x += 1 * cos(interval * 2 * PI / 60);
-          z += 2 * sin(interval * 2 * PI / 60);
+          x += 1 * cos((interval * 2 * PI) / 60);
+          z += 2 * sin((interval * 2 * PI) / 60);
+          chart.series[0].points[1].update([x, y, z], false);
 
-          chart.series[1].points[0].update([x, y, z], false);
+          x += 0.5 * cos((interval * 2 * PI) / 30);
+          z += 0.5 * sin((interval * 2 * PI) / 30);
+          chart.series[0].points[2].update([x, y, z], false);
+
           chart.redraw(false);
 
           interval++;
@@ -62,6 +66,12 @@ const chart = new Highcharts.Chart({
       width: 10,
       height: 10,
       depth: 10,
+    },
+    series: {
+      planeProjection: {
+        enabled: true,
+        byPoint: true,
+      },
     },
   },
   yAxis: {
@@ -88,30 +98,40 @@ const chart = new Highcharts.Chart({
   series: [
     {
       name: "Demo series",
-      data: [[5, 5, 5]],
-      marker: {
-        radius: 16,
-      },
-      color: radialGradient("yellow"),
-      planeProjection: {
-        enabled: true,
-        fill: "yellow",
-        radius: 16,
-      },
-    },
-    {
-      name: "Demo series",
-      data: [[5, 5, 2]],
-      marker: {
-        radius: 12,
-        symbol: "circle",
-      },
-      color: radialGradient("blue"),
-      planeProjection: {
-        enabled: true,
-        fill: "blue",
-        radius: 12,
-      },
+      data: [
+        {
+          x: 5,
+          y: 5,
+          z: 5,
+          marker: {
+            radius: 16,
+            fillColor: radialGradient("yellow"),
+          },
+          color: "yellow",
+        },
+        {
+          x: 5,
+          y: 5,
+          z: 2,
+          marker: {
+            radius: 12,
+            symbol: "circle",
+            fillColor: radialGradient("blue"),
+          },
+          color: "blue",
+        },
+        {
+          x: 5,
+          y: 5,
+          z: 0,
+          marker: {
+            radius: 6,
+            symbol: "circle",
+            fillColor: radialGradient("gray"),
+          },
+          color: "brown",
+        },
+      ],
     },
   ],
 });
