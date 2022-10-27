@@ -25,7 +25,6 @@ Highcharts.chart("container", {
       data: [15, 4, 3, 2, 1],
       height: "40%",
       center: ["50%", "75%"],
-      zIndex: 1,
     },
   ],
 });
