@@ -39,17 +39,13 @@ const updateChartOptions = (chart, options) => {
   chart.series[0].update(options);
 };
 
-let liveDataInterval = [];
-
-const handleLiveData = (button) => {
-  const { chart, selectedButton } = button,
-    selectedButtonElement = document.querySelector(
-      `.${selectedButton.className}`
-    ),
+function handleLiveData(button) {
+  const chart = this.chart,
+    liveDataInterval = chart.liveDataInterval,
     index = chart.index;
 
   if (!liveDataInterval[index]) {
-    liveDataInterval[index] = setInterval(() => {
+    chart.liveDataInterval[index] = setInterval(() => {
       const series = chart.series[0],
         min = 1,
         max = 100,
@@ -59,17 +55,24 @@ const handleLiveData = (button) => {
       series.addPoint([x, y]);
     }, 1000);
   } else {
-    liveDataInterval[index] = clearInterval(liveDataInterval[index]);
+    chart.liveDataInterval[index] = clearInterval(liveDataInterval[index]);
   }
 
-  if (selectedButtonElement) {
-    Highcharts.fireEvent(button, "deselectButton", {
-      button: selectedButtonElement
+  if (button) {
+    Highcharts.fireEvent(this, "deselectButton", {
+      button
     });
   }
 };
 
 Highcharts.stockChart("container", {
+  chart: {
+    events: {
+      load() {
+        this.liveDataInterval = []
+      }
+    }
+  },
   title: {
     text: ""
   },
@@ -115,15 +118,20 @@ Highcharts.stockChart("container", {
     bindings: {
       liveData: {
         className: "live-data-btn",
-        init() {
-          handleLiveData(this);
-        }
+        init: handleLiveData
       }
     }
   }
 });
 
 Highcharts.stockChart("container-2", {
+  chart: {
+    events: {
+      load() {
+        this.liveDataInterval = []
+      }
+    }
+  },
   title: {
     text: ""
   },
@@ -175,9 +183,7 @@ Highcharts.stockChart("container-2", {
       },
       liveData: {
         className: "live-data-btn",
-        init() {
-          handleLiveData(this);
-        }
+        init: handleLiveData
       }
     }
   }
