@@ -41,11 +41,10 @@ const updateChartOptions = (chart, options) => {
 
 function handleLiveData(button) {
   const chart = this.chart,
-    liveDataInterval = chart.liveDataInterval,
-    index = chart.index;
+    liveDataInterval = chart.liveDataInterval;
 
-  if (!liveDataInterval[index]) {
-    chart.liveDataInterval[index] = setInterval(() => {
+  if (!liveDataInterval) {
+    chart.liveDataInterval = setInterval(() => {
       const series = chart.series[0],
         min = 1,
         max = 100,
@@ -55,7 +54,7 @@ function handleLiveData(button) {
       series.addPoint([x, y]);
     }, 1000);
   } else {
-    chart.liveDataInterval[index] = clearInterval(liveDataInterval[index]);
+    chart.liveDataInterval = clearInterval(liveDataInterval);
   }
 
   if (button) {
@@ -69,7 +68,7 @@ Highcharts.stockChart("container", {
   chart: {
     events: {
       load() {
-        this.liveDataInterval = []
+        this.liveDataInterval = null
       }
     }
   },
@@ -128,7 +127,7 @@ Highcharts.stockChart("container-2", {
   chart: {
     events: {
       load() {
-        this.liveDataInterval = []
+        this.liveDataInterval = null
       }
     }
   },
