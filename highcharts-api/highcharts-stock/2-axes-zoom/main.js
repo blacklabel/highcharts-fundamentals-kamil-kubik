@@ -10,13 +10,36 @@ const generateData = () => {
 
 console.info(generateData());
 
+const onMouseWheel = (event, axis) => {
+  console.info(event, axis);
+
+  if (
+    event.target.id === "x-helper-rect" ||
+    event.target.id === "y-helper-rect"
+  ) {
+    const firstXPoint = Math.min(
+        ...axis.series.map((series) => series.points[0].x)
+      ),
+      interval = 60 * 60 * 24 * 1000 * 6;
+
+    if (event.deltaY <= 0) {
+      axis.setExtremes(axis.min + interval, axis.max, false);
+    } else {
+      if (axis.min >= firstXPoint) {
+        axis.setExtremes(axis.min - interval, axis.max, false);
+      }
+    }
+  }
+};
+
 Highcharts.stockChart("container", {
   chart: {
     height: 800,
     events: {
       load() {
         const chart = this,
-          xAxis = chart.xAxis[0];
+          xAxis = chart.xAxis[0],
+          yAxis = chart.yAxis[0];
 
         xAxis.setExtremes(
           xAxis.min + 60 * 60 * 24 * 1000 * 120,
@@ -24,62 +47,45 @@ Highcharts.stockChart("container", {
           false
         );
 
+        const xAxisHelper = chart.renderer
+          .rect(xAxis.labelGroup.getBBox())
+          .attr("id", "x-helper-rect")
+          .css({ cursor: "w-resize", fill: "black" })
+          .add(xAxis.labelGroup)
+          .toFront();
+
+        // xAxisHelper.attr(xAxis.labelGroup.getBBox()).toFront();
+
         document.addEventListener("mousewheel", (event) => {
-          const firstXPoint = Math.min(
-              ...xAxis.series.map((series) => series.points[0].x)
-            ),
-            interval = 60 * 60 * 24 * 1000;
-
-          if (event.deltaY <= 0) {
-            xAxis.setExtremes(xAxis.min + interval, xAxis.max, false);
-          } else {
-            if (xAxis.min >= firstXPoint) {
-              xAxis.setExtremes(xAxis.min - interval, xAxis.max, false);
-            }
-          }
-
+          onMouseWheel(event, xAxis);
           chart.redraw(false);
         });
 
         chart.redraw(false);
+
+        document.addEventListener("mouseup", () => {
+          yAxis.active = false;
+        });
       },
       render() {
         const chart = this,
           yAxis = chart.yAxis[0],
-          xAxis = chart.xAxis[0],
           yAxisExtremes = yAxis.getExtremes();
 
-        // console.info(yAxis);
-        // console.info(yAxisExtremes);
-
-        yAxisHelper = chart.renderer
+        const yAxisHelper = chart.renderer
           .rect(chart.plotWidth - 20, chart.plotTop, 40, chart.plotHeight)
-          .attr("id", "helper-rect")
-          .css({ cursor: "ns-resize", fill: "transparent", zIndex: 50 })
-          .add(yAxis.labelGroup);
+          .attr("id", "y-helper-rect")
+          .css({ cursor: "ns-resize", fill: "transparent" })
+          .add();
 
-        yAxisHelper.on("mouseup", () => {
-          console.info('mouseup');
-          yAxis.active = false;
-        });
+        // yAxisHelper.attr(yAxis.labelGroup.getBBox()).toFront();
 
         yAxisHelper.on("mousedown", () => {
-          console.info('mousedown');
           yAxis.active = true;
         });
 
-        yAxisHelper.on("mouseout", (event) => {
-          console.info('mouseout', event.target.id);
-
-          // if (event.target.id !== 'helper-rect') {
-          //   yAxis.active = false;
-          // }
-        });
-
         yAxisHelper.on("mousemove", (event) => {
-          if (event.target.id === "helper-rect" && yAxis.active) {
-            console.info(event.target.id);
-
+          if (event.target.id === "y-helper-rect" && yAxis.active) {
             if (event.y < yAxis.prevCursorPosition) {
               yAxis.setExtremes(
                 yAxisExtremes.userMin
@@ -115,14 +121,10 @@ Highcharts.stockChart("container", {
   title: {
     text: "",
   },
-  // xAxis: {
-  //   overscroll: 2000000000,
-  // },
   yAxis: {
-    // min: 0,
-    // max: 10000,
-    tickInterval: 100,
+    // tickInterval: 100,
     labels: {
+      id: "labels",
       style: {
         cursor: "ns-resize",
       },
