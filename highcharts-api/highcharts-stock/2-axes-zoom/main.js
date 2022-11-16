@@ -126,9 +126,6 @@ Highcharts.stockChart("container", {
   title: {
     text: "",
   },
-  xAxis: {
-    id: "x-axis",
-  },
   yAxis: {
     tickInterval: 300,
     offset: 30,
