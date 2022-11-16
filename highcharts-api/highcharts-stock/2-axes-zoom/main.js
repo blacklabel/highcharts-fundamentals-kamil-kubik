@@ -8,21 +8,25 @@ const generateData = () => {
   ]);
 };
 
-console.info(generateData());
-
 const onMouseWheel = (event, axis) => {
-  console.info(event, axis);
+  const interval = 60 * 60 * 24 * 1000 * 6,
+    isScrollUp = event.deltaY <= 0;
 
-  if (
+  if (event.target.parentNode.id === "y-axis-label") {
+    if (isScrollUp) {
+      axis.setExtremes(axis.min + interval, axis.max - interval, false);
+    } else {
+      axis.setExtremes(axis.min - interval, axis.max + interval, false);
+    }
+  } else if (
     event.target.id === "x-helper-rect" ||
     event.target.id === "y-helper-rect"
   ) {
     const firstXPoint = Math.min(
-        ...axis.series.map((series) => series.points[0].x)
-      ),
-      interval = 60 * 60 * 24 * 1000 * 6;
+      ...axis.series.map((series) => series.points[0].x)
+    );
 
-    if (event.deltaY <= 0) {
+    if (isScrollUp) {
       axis.setExtremes(axis.min + interval, axis.max, false);
     } else {
       if (axis.min >= firstXPoint) {
@@ -47,21 +51,12 @@ Highcharts.stockChart("container", {
           false
         );
 
-        const xAxisHelper = chart.renderer
-          .rect(xAxis.labelGroup.getBBox())
-          .attr("id", "x-helper-rect")
-          .css({ cursor: "w-resize", fill: "black" })
-          .add(xAxis.labelGroup)
-          .toFront();
-
-        // xAxisHelper.attr(xAxis.labelGroup.getBBox()).toFront();
+        yAxis.labelGroup.attr("id", "y-axis-label");
 
         document.addEventListener("mousewheel", (event) => {
           onMouseWheel(event, xAxis);
           chart.redraw(false);
         });
-
-        chart.redraw(false);
 
         document.addEventListener("mouseup", () => {
           yAxis.active = false;
@@ -69,16 +64,26 @@ Highcharts.stockChart("container", {
       },
       render() {
         const chart = this,
+          xAxis = chart.xAxis[0],
           yAxis = chart.yAxis[0],
+          xAxisHelper = xAxis.xAxisHelper,
           yAxisExtremes = yAxis.getExtremes();
 
+        if (!xAxisHelper) {
+          xAxis.xAxisHelper = chart.renderer
+            .rect(xAxis.labelGroup.getBBox())
+            .attr("id", "x-helper-rect")
+            .css({ cursor: "w-resize", fill: "transparent" })
+            .add(xAxis.labelGroup);
+        } else {
+          xAxisHelper.toFront();
+        }
+
         const yAxisHelper = chart.renderer
-          .rect(chart.plotWidth - 20, chart.plotTop, 40, chart.plotHeight)
+          .rect(chart.plotWidth + 10, chart.plotTop, 40, chart.plotHeight)
           .attr("id", "y-helper-rect")
           .css({ cursor: "ns-resize", fill: "transparent" })
           .add();
-
-        // yAxisHelper.attr(yAxis.labelGroup.getBBox()).toFront();
 
         yAxisHelper.on("mousedown", () => {
           yAxis.active = true;
@@ -121,8 +126,12 @@ Highcharts.stockChart("container", {
   title: {
     text: "",
   },
+  xAxis: {
+    id: "x-axis",
+  },
   yAxis: {
-    // tickInterval: 100,
+    tickInterval: 500,
+    offset: 30,
     labels: {
       id: "labels",
       style: {
