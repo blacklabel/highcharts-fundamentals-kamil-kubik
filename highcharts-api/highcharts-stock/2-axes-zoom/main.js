@@ -130,7 +130,7 @@ Highcharts.stockChart("container", {
     id: "x-axis",
   },
   yAxis: {
-    tickInterval: 500,
+    tickInterval: 300,
     offset: 30,
     labels: {
       id: "labels",
